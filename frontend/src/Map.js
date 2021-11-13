@@ -12,12 +12,17 @@ import { Descriptions } from "antd";
 import { Button } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 
+import factory from "./factory";
+import web3 from "./web3";
+
 Geocode.setApiKey("AIzaSyBbFwpFKFzIJc9t3IBQvyErwONVc-kY1qE");
 class Map extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      amount: 100000,
       view: "map",
+      loading: false,
       address: "",
       city: "",
       area: "",
@@ -205,12 +210,29 @@ class Map extends React.Component {
       this.state.markerPosition.lng
     );
   }
+  async deployRide() {
+    try {
+      const accounts = await web3.eth.getAccounts();
+      await factory.methods
+        .createRide(
+          this.state.amount,
+          this.state.startPos.lat,
+          this.state.startPos.lng,
+          this.state.markerPosition.lat,
+          this.state.markerPosition.lng
+        )
+        .send({ from: accounts[0] });
+    } catch (err) {
+      console.log(err);
+    }
+  }
   click() {
     alert(
       `Your destination is: ${
         this.state.address
       }\nYour Total Fare: ${3123472} Wei\n Click Ok to confirm or exit `
     );
+    this.deployRide();
   }
   render() {
     const MapWithAMarker = withScriptjs(
