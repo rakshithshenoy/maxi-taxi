@@ -12,19 +12,38 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view: "passenger",
+      passenger: true,
+      driver: false,
+      driverAccept: false,
+      arrivalConfirm: false,
+      destination: false,
+      payment: false,
     };
     this.handleDriverClick = this.handleDriverClick.bind(this);
-    this.handleDriverClick = this.handlePassengerClick.bind(this);
+    this.handlePassengerClick = this.handlePassengerClick.bind(this);
   }
 
   handlePassengerClick(e) {
     e.preventDefault();
-    this.setState({ view: "passenger" });
+    this.setState({
+      passenger: true,
+      driver: false,
+      driverAccept: false,
+      arrivalConfirl: false,
+      destination: false,
+      payment: false,
+    });
   }
   handleDriverClick(e) {
     e.preventDefault();
-    this.setState({ view: "driver" });
+    this.setState({
+      passenger: false,
+      driver: true,
+      driverAccept: false,
+      arrivalConfirl: false,
+      destination: false,
+      payment: false,
+    });
   }
   render() {
     return (
@@ -34,18 +53,21 @@ class App extends React.Component {
 
           <Menu.Item
             name="passenger"
-            active={this.state.view == "passenger"}
+            active={this.state.passenger}
             content="passenger"
             onClick={this.handlePassengerClick}
           />
           <Menu.Item
             name="driver"
-            active={this.state.view == "driver"}
+            active={this.state.driver}
             content="driver"
             onClick={this.handleDriverClick}
           />
+
+          
         </Menu>
-        {this.state.view === "passenger" ? <Passenger /> : <Driver />}
+        {this.state.passenger ? <Passenger /> : <div></div>}
+        {this.state.driver ? <Driver /> : <div></div>}
       </div>
     );
   }
